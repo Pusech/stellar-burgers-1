@@ -4,8 +4,7 @@ import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
 
 import { resetPassword } from '../../services/slices/userSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'src/services/store';
+import { AppDispatch, useDispatch } from '../../services/store';
 
 export const ResetPassword: FC = () => {
   const navigate = useNavigate();

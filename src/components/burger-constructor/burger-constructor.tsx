@@ -1,8 +1,12 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../services/store';
+import {
+  RootState,
+  AppDispatch,
+  useSelector,
+  useDispatch
+} from '../../services/store';
 import {
   createOrder,
   selectCurrentOrder

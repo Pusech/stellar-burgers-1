@@ -1,8 +1,12 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { updateUser } from '../../services/slices/userSlice';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../services/store';
+import {
+  RootState,
+  AppDispatch,
+  useDispatch,
+  useSelector
+} from '../../services/store';
 import { Preloader } from '@ui';
 
 export const Profile: FC = () => {

@@ -4,39 +4,31 @@ import { TOrder } from '@utils-types';
 
 interface OrderState {
   currentOrder: TOrder | null;
-  orderStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  orderStatus: '' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   isLoading: boolean;
 }
 
 const initialState: OrderState = {
   currentOrder: null,
-  orderStatus: 'idle',
+  orderStatus: '',
   error: null,
   isLoading: false
 };
 
 export const createOrder = createAsyncThunk(
   'order/createOrder',
-  async (data: string[], { rejectWithValue }) => {
-    try {
-      const response = await orderBurgerApi(data);
-      return response.order; // Возвращаем только объект заказа
-    } catch (err) {
-      return rejectWithValue('Failed to create order');
-    }
+  async (data: string[]) => {
+    const response = await orderBurgerApi(data);
+    return response.order; // Возвращаем только объект заказа
   }
 );
 
 export const fetchOrderByNumber = createAsyncThunk(
   'order/fetchOrderByNumber',
-  async (number: number, { rejectWithValue }) => {
-    try {
-      const response = await getOrderByNumberApi(number);
-      return response.orders[0]; //первый заказ
-    } catch (err) {
-      return rejectWithValue('Failed to fetch order');
-    }
+  async (number: number) => {
+    const response = await getOrderByNumberApi(number);
+    return response.orders[0]; //первый заказ
   }
 );
 
@@ -79,3 +71,6 @@ const orderSlice = createSlice({
 export const { selectCurrentOrder } = orderSlice.selectors;
 export const { clearCurrentOrder } = orderSlice.actions;
 export default orderSlice.reducer;
+
+// ISLOADING ДОЛЖЕН ОТВЕЧАТЬ ЗА ТЕХНИЧЕСКИЙ СТАТУС
+// ОРДЕРСТАТУС ЗА СООТВЕТСТВЕННО ORDERSTATUS И ПРОВЕРЬ СТАТУСЫ В ДРУГИХ

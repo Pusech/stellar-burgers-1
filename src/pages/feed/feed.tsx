@@ -2,8 +2,12 @@ import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 import { getFeeds } from '../../services/slices/feedSlice';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../services/store';
+import {
+  RootState,
+  AppDispatch,
+  useDispatch,
+  useSelector
+} from '../../services/store';
 
 export const Feed: FC = () => {
   const dispatch: AppDispatch = useDispatch();

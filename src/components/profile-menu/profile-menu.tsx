@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ProfileMenuUI } from '@ui';
-import { AppDispatch } from 'src/services/store';
-import { useDispatch } from 'react-redux';
+import { AppDispatch, useDispatch } from '../../services/store';
 import { logout } from '../../services/slices/userSlice';
 
 export const ProfileMenu: FC = () => {
@@ -11,13 +10,8 @@ export const ProfileMenu: FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await dispatch(logout()).unwrap();
-
-      navigate('/login');
-    } catch (error) {
-      console.error('logout:', error);
-    }
+    await dispatch(logout());
+    navigate('/login');
   };
 
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;

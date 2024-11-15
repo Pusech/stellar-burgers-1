@@ -1,8 +1,7 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { loginUser } from '../../services/slices/userSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'src/services/store';
+import { AppDispatch, useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
@@ -14,7 +13,7 @@ export const Login: FC = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     await dispatch(loginUser({ email, password }));
-    navigate('/profile');
+    navigate('/');
   };
 
   return (

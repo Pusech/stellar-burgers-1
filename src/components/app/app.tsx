@@ -11,7 +11,7 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { useDispatch, useSelector } from '../../services/store';
+import { RootState, useDispatch, useSelector } from '../../services/store';
 import { AppHeader, IngredientDetails } from '@components';
 import {
   BrowserRouter as Router,
@@ -27,7 +27,9 @@ import {
   getIngredients,
   getIngredientsSelector
 } from '../../services/slices/ingredientsSlice';
-import { OnlyAuth, OnlyUnAuth } from './protected-route/protected-route';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
+import { getUser } from '../../services/slices/userSlice';
+import { clearCurrentOrder } from '../../services/slices/orderSlice';
 
 const App = () => {
   const navigate = useNavigate();
@@ -38,7 +40,11 @@ const App = () => {
 
   const ingredients = useSelector(getIngredientsSelector);
 
+  // const currentState = useSelector((state: RootState) => state);
+  // console.log(currentState);
+
   function handleClose() {
+    // dispatch(clearCurrentOrder());
     navigate(-1);
   }
 
@@ -46,7 +52,16 @@ const App = () => {
     if (!ingredients.length) {
       dispatch(getIngredients());
     }
+    dispatch(getUser());
   }, []);
+
+  useEffect(() => {
+    dispatch(clearCurrentOrder());
+  }, [location]);
+  // Почему так:
+  // при нажатии пользователем кнопочки назад в браузере с открытой модалкой
+  // либо при переходе в конструктор из отдельной вкладки заказа
+  // модалка всегда оставалась открытой поэтому я чищу стейт при любом изменении локации
 
   return (
     <div className={styles.app}>
@@ -78,14 +93,18 @@ const App = () => {
           path='/profile/orders/:number'
           element={<OnlyAuth component={<OrderInfo />} />}
         />
+
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+
         <Route path='*' element={<NotFound404 />} />
       </Routes>
+
       {location.state?.background && (
         <Routes>
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Детали заказа' onClose={handleClose}>
+              <Modal title='бебебе' onClose={handleClose}>
                 <OrderInfo />
               </Modal>
             }
@@ -101,7 +120,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='Детали заказа' onClose={handleClose}>
+              <Modal title='бебебе' onClose={handleClose}>
                 <OrderInfo />
               </Modal>
             }

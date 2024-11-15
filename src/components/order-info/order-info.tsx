@@ -1,16 +1,23 @@
 import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient, TOrder, TOrdersData } from '@utils-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../services/store';
-import { useParams } from 'react-router-dom';
+import { TIngredient, TOrder } from '@utils-types';
+import {
+  AppDispatch,
+  RootState,
+  useDispatch,
+  useSelector
+} from '../../services/store';
+import { useLocation, useParams } from 'react-router-dom';
 import { fetchOrderByNumber } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const orderNumber = Number(useParams().number);
+
+  const location = useLocation();
+  const isModal = location.state?.background;
 
   const ingredients: TIngredient[] = useSelector(
     (state: RootState) => state.ingredients.ingredients
@@ -69,5 +76,5 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo} isModal={isModal} />;
 };

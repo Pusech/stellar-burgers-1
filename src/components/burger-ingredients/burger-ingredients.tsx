@@ -2,12 +2,14 @@ import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { RootState, AppDispatch } from '../../services/store';
+import {
+  RootState,
+  AppDispatch,
+  useDispatch,
+  useSelector
+} from '../../services/store';
 import { Preloader } from '@ui';
-
-// selectory
 
 export const BurgerIngredients: FC = () => {
   const dispatch: AppDispatch = useDispatch();

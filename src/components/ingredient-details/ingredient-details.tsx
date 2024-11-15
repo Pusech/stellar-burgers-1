@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { RootState, AppDispatch } from '../../services/store';
+import { useLocation, useParams } from 'react-router-dom';
+import { RootState, useSelector } from '../../services/store';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const isModal = location.state?.background;
 
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.ingredients
@@ -20,5 +21,7 @@ export const IngredientDetails: FC = () => {
     return <Preloader />;
   }
 
-  return <IngredientDetailsUI ingredientData={ingredientData} />;
+  return (
+    <IngredientDetailsUI ingredientData={ingredientData} isModal={isModal} />
+  );
 };
