@@ -40,11 +40,7 @@ const App = () => {
 
   const ingredients = useSelector(getIngredientsSelector);
 
-  // const currentState = useSelector((state: RootState) => state);
-  // console.log(currentState);
-
   function handleClose() {
-    // dispatch(clearCurrentOrder());
     navigate(-1);
   }
 
