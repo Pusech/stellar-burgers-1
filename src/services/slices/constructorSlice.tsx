@@ -1,18 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient, TConstructorIngredient, TOrder } from '../../utils/types';
 
-interface ConstructorState {
+export interface ConstructorState {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
-  orderRequest: boolean;
-  orderModalData: null | TOrder;
 }
 
 const initialState: ConstructorState = {
   bun: null,
-  ingredients: [],
-  orderRequest: false,
-  orderModalData: null
+  ingredients: []
 };
 
 export const constructorSlice = createSlice({
@@ -29,8 +25,6 @@ export const constructorSlice = createSlice({
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
-      state.orderRequest = false;
-      state.orderModalData = null;
     },
 
     moveIngredient: (
