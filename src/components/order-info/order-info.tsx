@@ -1,23 +1,36 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient } from '@utils-types';
+import { TIngredient, TOrder } from '@utils-types';
+import {
+  AppDispatch,
+  RootState,
+  useDispatch,
+  useSelector
+} from '../../services/store';
+import { useLocation, useParams } from 'react-router-dom';
+import { fetchOrderByNumber } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const dispatch: AppDispatch = useDispatch();
 
-  const ingredients: TIngredient[] = [];
+  const orderNumber = Number(useParams().number);
 
-  /* Готовим данные для отображения */
+  const location = useLocation();
+  const isModal = location.state?.background;
+
+  const ingredients: TIngredient[] = useSelector(
+    (state: RootState) => state.ingredients.ingredients
+  );
+
+  useEffect(() => {
+    dispatch(fetchOrderByNumber(orderNumber));
+  }, [dispatch, orderNumber]);
+
+  const orderData: TOrder | null = useSelector(
+    (state: RootState) => state.order.currentOrder
+  );
+
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 
@@ -63,5 +76,5 @@ export const OrderInfo: FC = () => {
     return <Preloader />;
   }
 
-  return <OrderInfoUI orderInfo={orderInfo} />;
+  return <OrderInfoUI orderInfo={orderInfo} isModal={isModal} />;
 };

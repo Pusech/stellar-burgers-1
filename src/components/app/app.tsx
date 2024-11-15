@@ -1,84 +1,130 @@
 import {
   ConstructorPage,
-  NotFound404,
-  Feed,
   Login,
   Register,
   ForgotPassword,
   ResetPassword,
   Profile,
-  ProfileOrders
+  ProfileOrders,
+  NotFound404,
+  Feed
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { RootState, useDispatch, useSelector } from '../../services/store';
+import { AppHeader, IngredientDetails } from '@components';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
+import { Modal } from '../modal/modal';
+import { OrderInfo } from '../order-info/order-info';
+import { useEffect } from 'react';
+import {
+  getIngredients,
+  getIngredientsSelector
+} from '../../services/slices/ingredientsSlice';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
+import { getUser } from '../../services/slices/userSlice';
+import { clearCurrentOrder } from '../../services/slices/orderSlice';
 
 const App = () => {
-  const handleClose = () => null;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const backgroundLocation = location.state?.background;
+
+  const ingredients = useSelector(getIngredientsSelector);
+
+  function handleClose() {
+    navigate(-1);
+  }
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      dispatch(getIngredients());
+    }
+    dispatch(getUser());
+  }, []);
+
+  useEffect(() => {
+    dispatch(clearCurrentOrder());
+  }, [location]);
+  // Почему так:
+  // при нажатии пользователем кнопочки назад в браузере с открытой модалкой
+  // либо при переходе в конструктор из отдельной вкладки заказа
+  // модалка всегда оставалась открытой поэтому я чищу стейт при любом изменении локации
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <BrowserRouter>
+      <Routes location={backgroundLocation || location}>
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
+        <Route path='/login' element={<OnlyUnAuth component={<Login />} />} />
+        <Route
+          path='/register'
+          element={<OnlyUnAuth component={<Register />} />}
+        />
+        <Route
+          path='/forgot-password'
+          element={<OnlyUnAuth component={<ForgotPassword />} />}
+        />
+        <Route
+          path='/reset-password'
+          element={<OnlyAuth component={<ResetPassword />} />}
+        />
+
+        <Route path='/profile' element={<OnlyAuth component={<Profile />} />} />
+        <Route
+          path='/profile/orders'
+          element={<OnlyAuth component={<ProfileOrders />} />}
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={<OnlyAuth component={<OrderInfo />} />}
+        />
+
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+
+        <Route path='*' element={<NotFound404 />} />
+      </Routes>
+
+      {location.state?.background && (
         <Routes>
-          <Route path='/' element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />}>
-            <Route
-              path='/feed:number'
-              element={
-                <Modal title='FeedNumber' onClose={handleClose}>
-                  <OrderInfo />
-                </Modal>
-              }
-            />
-          </Route>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/profile' element={<Profile />}>
-            <Route path='/profile/orders' element={<ProfileOrders />}>
-              <Route
-                path='/profile/orders/:number'
-                element={
-                  <Modal title='OrderNumber' onClose={handleClose}>
-                    <OrderInfo />
-                  </Modal>
-                }
-              />
-            </Route>
-          </Route>
           <Route
-            path='/ingredients:id'
+            path='/feed/:number'
             element={
-              <Modal title='IngredientId' onClose={handleClose}>
+              <Modal title='бебебе' onClose={handleClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal title='Детали ингредиента' onClose={handleClose}>
                 <IngredientDetails />
               </Modal>
             }
           />
-
-          <Route path='*' element={<NotFound404 />} />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title='бебебе' onClose={handleClose}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
         </Routes>
-      </BrowserRouter>
+      )}
     </div>
   );
 };
 
 export default App;
-
-// по роуту / расположите компонент ConstructorPage;
-// по роуту /feed расположите компонент Feed;
-// по защищённому роуту /login расположите компонент Login;
-// по защищённому роуту /register расположите компонент Register;
-// по защищённому роуту /forgot-password расположите компонент ForgotPassword;
-// по защищённому роуту /reset-password расположите компонент ResetPassword;
-// по защищённому роуту /profile расположите компонент Profile;
-// по защищённому роуту /profile/orders расположите компонент ProfileOrders;
-// по роуту * расположите компонент NotFound404.
-
-// Также нужно добавить модалки с дополнительной информацией:
-// по роуту /feed/:number расположите компонент Modal с компонентом OrderInfo;
-// по роуту /ingredients/:id расположите компонент Modal с компонентом IngredientsDetails;
-// по защищённому роуту /profile/orders/:number расположите компонент Modal с компонентом OrderInfo.

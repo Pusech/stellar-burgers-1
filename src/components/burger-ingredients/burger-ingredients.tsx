@@ -2,18 +2,22 @@ import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { RootState, AppDispatch } from '../../services/store';
+import {
+  RootState,
+  AppDispatch,
+  useDispatch,
+  useSelector
+} from '../../services/store';
 import { Preloader } from '@ui';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
   const dispatch: AppDispatch = useDispatch();
 
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.ingredients
   );
+
   const isLoading = useSelector(
     (state: RootState) => state.ingredients.isLoading
   );
