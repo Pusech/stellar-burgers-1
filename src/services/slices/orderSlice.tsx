@@ -4,14 +4,12 @@ import { TOrder } from '@utils-types';
 
 interface OrderState {
   currentOrder: TOrder | null;
-  orderStatus: '' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
   isLoading: boolean;
 }
 
 const initialState: OrderState = {
   currentOrder: null,
-  orderStatus: '',
   error: null,
   isLoading: false
 };
@@ -42,27 +40,27 @@ const orderSlice = createSlice({
   },
   selectors: {
     selectCurrentOrder: (state: OrderState) => state.currentOrder,
-    selectOrderStatus: (state: OrderState) => state.orderStatus,
+    // selectOrderStatus: (state: OrderState) => state.orderStatus,
     selectOrderError: (state: OrderState) => state.error
   },
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
-        state.orderStatus = 'loading';
+        // state.orderStatus = 'loading';
         state.isLoading = true;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderStatus = 'succeeded';
+        // state.orderStatus = 'succeeded';
         state.currentOrder = action.payload;
         state.isLoading = false;
       })
       .addCase(createOrder.rejected, (state, action) => {
-        state.orderStatus = 'failed';
+        // state.orderStatus = 'failed';
         state.error = action.payload as string;
         state.isLoading = false;
       })
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
-        state.orderStatus = 'succeeded';
+        // state.orderStatus = 'succeeded';
         state.currentOrder = action.payload;
       });
   }
@@ -72,5 +70,4 @@ export const { selectCurrentOrder } = orderSlice.selectors;
 export const { clearCurrentOrder } = orderSlice.actions;
 export default orderSlice.reducer;
 
-// ISLOADING ДОЛЖЕН ОТВЕЧАТЬ ЗА ТЕХНИЧЕСКИЙ СТАТУС
-// ОРДЕРСТАТУС ЗА СООТВЕТСТВЕННО ORDERSTATUS И ПРОВЕРЬ СТАТУСЫ В ДРУГИХ
+//забыл убрать этот комментарий :)

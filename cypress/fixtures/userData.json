@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "refreshToken": "643d69a5c3f7b9001cfa0941",
+  "accessToken": "643d69a5c3f7b9001cfa093c",
+  "user": {
+    "email": "admin@mail.com",
+    "name": "admin"
+  }
+}
