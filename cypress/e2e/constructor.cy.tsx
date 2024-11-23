@@ -3,6 +3,19 @@ beforeEach(() => {
   cy.visit('/'); // Переход на главную страницу
   cy.intercept('/api/orders', { fixture: 'NewOrderData.json' });
   cy.intercept('/api/auth/user', { fixture: 'userData.json' }); // // Подставляются моковые токены авторизации.
+
+  // Устанавливаем токены авторизации
+  cy.setCookie('accessToken', 'fakeAccessToken');
+  cy.window().then((window) => {
+    window.localStorage.setItem('refreshToken', 'fakeRefreshToken');
+  });
+});
+
+afterEach(() => {
+  cy.clearCookies();
+  cy.window().then((window) => {
+    window.localStorage.clear();
+  });
 });
 
 describe('Конструктор - добавление ингредиентов', () => {

@@ -1,40 +1,146 @@
-// короче тут почитать посмотреть подумать
+import { rootReducer } from './store';
+import {
+  TIngredient,
+  TConstructorIngredient,
+  TOrder,
+  TUser
+} from '../utils/types';
 
-import store, { RootState } from './store';
+describe('rootReducer', () => {
+  it('должен возвращать начальное состояние, если state равен undefined', () => {
+    const initialState = rootReducer(undefined, { type: '@@INIT' });
 
-describe('Стор', () => {
-  test('rootReducer', () => {
-    const state: RootState = store.getState();
-
-    expect(state.user).toEqual({
-      user: null,
-      isLoading: false,
-      error: null
+    expect(initialState).toEqual({
+      user: {
+        user: null,
+        isLoading: false,
+        error: null
+      },
+      ingredients: {
+        ingredients: [],
+        isLoading: false,
+        status: 'idle'
+      },
+      order: {
+        currentOrder: null,
+        error: null,
+        isLoading: false
+      },
+      orders: {
+        orders: [],
+        error: null,
+        isLoading: false
+      },
+      feed: {
+        orders: [],
+        total: 0,
+        totalToday: 0,
+        error: null,
+        isLoading: false
+      },
+      constructorBurger: {
+        bun: null,
+        ingredients: []
+      }
     });
+  });
 
-    expect(state.ingredients).toEqual({
-      ingredients: [],
-      isLoading: false,
-      status: 'idle'
-    });
+  it('должен возвращать текущее состояние, если экшен не обработан', () => {
+    const currentState = {
+      user: {
+        user: { name: 'Admin Admenov', email: 'admin@mail.com' },
+        isLoading: false,
+        error: null
+      },
+      ingredients: {
+        ingredients: [
+          {
+            _id: '1',
+            name: 'Bun',
+            type: 'bun',
+            proteins: 10,
+            fat: 5,
+            carbohydrates: 20,
+            calories: 250,
+            price: 100,
+            image: 'image.jpg',
+            image_large: 'image_large.jpg',
+            image_mobile: 'image_mobile.jpg'
+          } as TIngredient
+        ],
+        isLoading: false,
+        status: 'loaded'
+      },
+      order: {
+        currentOrder: {
+          _id: 'order1',
+          status: 'done',
+          name: 'Burger Order',
+          createdAt: '2024-11-24',
+          updatedAt: '2024-11-24',
+          number: 1,
+          ingredients: ['1']
+        } as TOrder,
+        error: null,
+        isLoading: false
+      },
+      orders: {
+        orders: [
+          {
+            _id: 'order2',
+            status: 'pending',
+            name: 'Order 2',
+            createdAt: '2024-11-23',
+            updatedAt: '2024-11-23',
+            number: 2,
+            ingredients: ['1', '2']
+          } as TOrder
+        ],
+        error: null,
+        isLoading: false
+      },
+      feed: {
+        orders: [],
+        total: 0,
+        totalToday: 0,
+        error: null,
+        isLoading: false
+      },
+      constructorBurger: {
+        bun: {
+          _id: '1',
+          name: 'Bun',
+          type: 'bun',
+          proteins: 10,
+          fat: 5,
+          carbohydrates: 20,
+          calories: 250,
+          price: 100,
+          image: 'image.jpg',
+          image_large: 'image_large.jpg',
+          image_mobile: 'image_mobile.jpg'
+        } as TIngredient,
+        ingredients: [
+          {
+            _id: '2',
+            name: 'Cheese',
+            type: 'main',
+            proteins: 15,
+            fat: 10,
+            carbohydrates: 5,
+            calories: 300,
+            price: 50,
+            image: 'cheese.jpg',
+            image_large: 'cheese_large.jpg',
+            image_mobile: 'cheese_mobile.jpg',
+            id: 'unique-id-2'
+          } as TConstructorIngredient
+        ]
+      }
+    };
 
-    expect(state.orders).toEqual({
-      orders: [],
-      error: null,
-      isLoading: false
-    });
+    const nextState = rootReducer(currentState, { type: 'UNKNOWN_ACTION' });
 
-    expect(state.feed).toEqual({
-      orders: [],
-      total: 0,
-      totalToday: 0,
-      error: null,
-      isLoading: false
-    });
-
-    expect(state.constructorBurger).toEqual({
-      bun: null,
-      ingredients: []
-    });
+    expect(nextState).toEqual(currentState); // Состояние не должно изменяться
   });
 });
