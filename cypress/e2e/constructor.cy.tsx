@@ -6,6 +6,7 @@ const MODAL_TITLE = '[data-cy="modal-title"]';
 const MODAL_CLOSE = '[data-cy="modal-close"]';
 const ORDER_BUTTON = '[data-cy="order-button"]';
 const ORDER_NUMBER = '[data-cy="order-number"]';
+const MODAL_OVERLAY = '[data-cy="modal-overlay"]';
 
 const INGREDIENTS = {
   bun: '[data-cy="ingredient-643d69a5c3f7b9001cfa093c"]',
@@ -18,11 +19,14 @@ beforeEach(() => {
   cy.visit('/');
   cy.intercept('/api/orders', { fixture: 'NewOrderData.json' });
   cy.intercept('/api/auth/user', { fixture: 'userData.json' });
-
   cy.setCookie('accessToken', 'fakeAccessToken');
   cy.window().then((window) => {
     window.localStorage.setItem('refreshToken', 'fakeRefreshToken');
   });
+
+  cy.get(INGREDIENTS.bun).as('bun');
+  cy.get(INGREDIENTS.main).as('main');
+  cy.get(INGREDIENTS.sauce).as('sauce');
 });
 
 afterEach(() => {
@@ -34,7 +38,6 @@ afterEach(() => {
 
 describe('Конструктор - добавление ингредиентов', () => {
   it('Проверка на добавление булки в конструктор', () => {
-    cy.get(INGREDIENTS.bun).as('bun');
     cy.get('@bun').should('exist');
     cy.get('@bun').find('button').click();
     cy.get(INGREDIENT_BUN_TOP)
@@ -46,7 +49,6 @@ describe('Конструктор - добавление ингредиентов
   });
 
   it('Проверка на добавление начинки (main) в конструктор', () => {
-    cy.get(INGREDIENTS.main).as('main');
     cy.get('@main').should('exist'); // Проверяем наличие начинки
     cy.get('@main').find('button').click(); // Кликаем по кнопке для добавления начинки
     cy.get(INGREDIENT_ITEM)
@@ -55,17 +57,12 @@ describe('Конструктор - добавление ингредиентов
   });
 
   it('Проверка на добавление соуса в конструктор', () => {
-    cy.get(INGREDIENTS.sauce).as('sauce');
     cy.get('@sauce').should('exist');
     cy.get('@sauce').find('button').click();
     cy.get(INGREDIENT_ITEM).contains('Соус Spicy-X').should('exist');
   });
 
   it('Проверка на добавление булок, начинки и соуса в конструктор', () => {
-    cy.get(INGREDIENTS.bun).as('bun');
-    cy.get(INGREDIENTS.main).as('main');
-    cy.get(INGREDIENTS.sauce).as('sauce');
-
     cy.get('@bun').find('button').click();
     cy.get('@main').find('button').click();
     cy.get('@sauce').find('button').click();
@@ -85,14 +82,12 @@ describe('Конструктор - добавление ингредиентов
 
 describe('Модальное окно ингредиента', () => {
   it('Открытие модального окна при клике на ингредиент', () => {
-    cy.get(INGREDIENTS.main).as('main');
     cy.get('@main').click();
     cy.get(MODAL).should('be.visible');
     cy.get(MODAL_TITLE).contains('Детали ингредиента').should('exist');
   });
 
   it('Закрытие модального окна при клике на крестик', () => {
-    cy.get(INGREDIENTS.main).as('main');
     cy.get('@main').click();
     cy.get(MODAL).should('be.visible');
     cy.get(MODAL_CLOSE).click();
@@ -100,20 +95,15 @@ describe('Модальное окно ингредиента', () => {
   });
 
   it('Закрытие модального окна при клике на оверлей', () => {
-    cy.get(INGREDIENTS.main).as('main');
     cy.get('@main').click();
     cy.get(MODAL).should('be.visible');
-    cy.get('[data-cy="modal-overlay"]').click({ force: true });
+    cy.get(MODAL_OVERLAY).click({ force: true });
     cy.get(MODAL).should('not.exist');
   });
 });
 
 describe('Создание заказа', () => {
   it('Создание и проверка заказа', () => {
-    cy.get(INGREDIENTS.bun).as('bun');
-    cy.get(INGREDIENTS.main).as('main');
-    cy.get(INGREDIENTS.sauce).as('sauce');
-
     cy.get('@bun').find('button').click();
     cy.get('@main').find('button').click();
     cy.get('@sauce').find('button').click();
