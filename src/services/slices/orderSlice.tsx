@@ -8,7 +8,7 @@ interface OrderState {
   isLoading: boolean;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   currentOrder: null,
   error: null,
   isLoading: false

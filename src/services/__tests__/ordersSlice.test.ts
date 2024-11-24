@@ -1,12 +1,6 @@
-import ordersReducer, { getOrders } from '../slices/ordersSlice';
+import ordersReducer, { getOrders, initialState } from '../slices/ordersSlice';
 
 describe('ordersSlice', () => {
-  const initialState = {
-    orders: [],
-    error: null,
-    isLoading: false
-  };
-
   test('initial state', () => {
     expect(ordersReducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });

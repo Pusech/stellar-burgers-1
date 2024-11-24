@@ -1,14 +1,6 @@
-import feedReducer, { getFeeds } from '../slices/feedSlice';
+import feedReducer, { getFeeds, initialState } from '../slices/feedSlice';
 
 describe('feedSlice test', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    error: null,
-    isLoading: false
-  };
-
   test('getFeed feedSlice', () => {
     expect(feedReducer(undefined, { type: getFeeds.pending.type })).toEqual({
       ...initialState,

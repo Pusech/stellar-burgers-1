@@ -6,42 +6,24 @@ import {
   TUser
 } from '../utils/types';
 
+import { initialState as feedInitial } from './slices/feedSlice';
+import { initialState as ingredientsInitial } from './slices/ingredientsSlice';
+import { initialState as orderInitial } from './slices/orderSlice';
+import { initialState as constructorInitial } from './slices/constructorSlice';
+import { initialState as userInitial } from './slices/userSlice';
+import { initialState as ordersInitial } from './slices/ordersSlice';
+
 describe('rootReducer', () => {
   it('должен возвращать начальное состояние, если state равен undefined', () => {
     const initialState = rootReducer(undefined, { type: '@@INIT' });
 
     expect(initialState).toEqual({
-      user: {
-        user: null,
-        isLoading: false,
-        error: null
-      },
-      ingredients: {
-        ingredients: [],
-        isLoading: false,
-        status: 'idle'
-      },
-      order: {
-        currentOrder: null,
-        error: null,
-        isLoading: false
-      },
-      orders: {
-        orders: [],
-        error: null,
-        isLoading: false
-      },
-      feed: {
-        orders: [],
-        total: 0,
-        totalToday: 0,
-        error: null,
-        isLoading: false
-      },
-      constructorBurger: {
-        bun: null,
-        ingredients: []
-      }
+      user: userInitial,
+      ingredients: ingredientsInitial,
+      order: orderInitial,
+      orders: ordersInitial,
+      feed: feedInitial,
+      constructorBurger: constructorInitial
     });
   });
 

@@ -4,16 +4,12 @@ import constructorReducer, {
   removeIngredientByIndex,
   clearConstructor,
   moveIngredient,
-  ConstructorState
+  ConstructorState,
+  initialState
 } from '../slices/constructorSlice';
 import { TIngredient, TConstructorIngredient } from '../../utils/types';
 
 describe('constructorSlice tests', () => {
-  const initialState: ConstructorState = {
-    bun: null,
-    ingredients: []
-  };
-
   const mockBun: TIngredient = {
     _id: '1',
     name: 'Булочка',

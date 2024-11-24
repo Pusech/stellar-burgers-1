@@ -1,13 +1,10 @@
-import ingredientsReducer, { getIngredients } from '../slices/ingredientsSlice';
+import ingredientsReducer, {
+  getIngredients,
+  initialState
+} from '../slices/ingredientsSlice';
 import { TIngredient } from '../../utils/types';
 
 describe('ingredientsSlice tests', () => {
-  const initialState = {
-    ingredients: [],
-    isLoading: false,
-    status: 'idle'
-  };
-
   const mockIngredients: TIngredient[] = [
     {
       _id: '1',

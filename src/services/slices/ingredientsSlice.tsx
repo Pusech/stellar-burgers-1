@@ -8,7 +8,7 @@ type TIngredientState = {
   status: string;
 };
 
-const initialState: TIngredientState = {
+export const initialState: TIngredientState = {
   ingredients: [],
   isLoading: false,
   status: 'idle'

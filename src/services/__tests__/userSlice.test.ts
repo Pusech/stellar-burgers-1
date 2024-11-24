@@ -4,16 +4,11 @@ import userReducer, {
   loginUser,
   getUser,
   updateUser,
-  logout
+  logout,
+  initialState
 } from '../slices/userSlice';
 
 describe('userSlice', () => {
-  const initialState = {
-    user: null,
-    isLoading: false,
-    error: null
-  };
-
   test('initial state', () => {
     expect(userReducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
