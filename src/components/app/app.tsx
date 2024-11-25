@@ -39,7 +39,7 @@ const App = () => {
   const backgroundLocation = location.state?.background;
 
   const ingredients = useSelector(getIngredientsSelector);
-
+  console.log(ingredients);
   function handleClose() {
     navigate(-1);
   }
@@ -100,7 +100,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='бебебе' onClose={handleClose}>
+              <Modal title='' onClose={handleClose}>
                 <OrderInfo />
               </Modal>
             }
@@ -116,7 +116,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='бебебе' onClose={handleClose}>
+              <Modal title='' onClose={handleClose}>
                 <OrderInfo />
               </Modal>
             }

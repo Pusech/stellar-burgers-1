@@ -10,7 +10,7 @@ export type FeedState = {
   isLoading: boolean;
 };
 
-const initialState: FeedState = {
+export const initialState: FeedState = {
   orders: [],
   total: 0,
   totalToday: 0,

@@ -8,9 +8,12 @@ export const IngredientDetailsUI: FC<IngredientDetailsUIProps> = memo(
       ingredientData;
 
     return (
-      <div className={styles.content}>
+      <div className={styles.content} data-cy='ingredient-card'>
         {!isModal && (
-          <h3 className={`text text_type_main-large pb-3 pt-20`}>
+          <h3
+            className={`text text_type_main-large pb-3 pt-20`}
+            data-cy='modal-title'
+          >
             Детали ингредиента
           </h3>
         )}
